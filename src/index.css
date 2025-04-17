@@ -1,31 +1,88 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* index.css */
+@import "tailwindcss";
+
+@theme {
+  /* Dark Theme (Primary) */
+  --color-bg: #323437;
+  --color-text: #d1d0c5;
+  --color-sub-text: #646669;
+  --color-brand: #e2b714;
+  --color-error: #ca4754;
+  --color-valid: #d1d0c5;
+  --color-invalid: #ca4754;
+  --color-muted: #646669;
+  --color-icon: #e2b714;
+  --color-accent: #e2b714;
+  
+  /* Light Theme Variables */
+  --color-bg-light: #f0f4f8;
+  --color-text-light: #323437;
+  --color-sub-text-light: #646669;
 }
 
-body {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Roboto", sans-serif;
-  background-color: #f0f4f8;
-}
+@layer base {
+  [data-theme="light"] {
+    --color-bg: var(--color-bg-light);
+    --color-text: var(--color-text-light);
+    --color-sub-text: var(--color-sub-text-light);
+  }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
+  * {
+    box-sizing: border-box;
+    border-color: var(--color-border);
+  }
 
-@media (prefers-color-scheme: dark) {
   body {
-    background-color: #323437;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: "Roboto Mono", monospace;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .game-container {
+    @apply flex flex-col items-center gap-8 w-full max-w-4xl p-4;
+  }
+
+  .game-status-bar {
+    @apply flex flex-wrap gap-8 text-sm;
+    
+    div {
+      @apply flex items-center gap-2;
+      
+      svg {
+        @apply text-brand;
+      }
+      
+      span {
+        @apply font-medium;
+      }
+    }
+  }
+
+  .text-content {
+    @apply w-full text-center text-[1.75rem] leading-[1.6] [word-spacing:5px];
+  }
+  
+  .text-valid {
+    @apply text-valid;
+  }
+  
+  .text-invalid {
+    @apply text-error;
+  }
+  
+  .text-muted {
+    @apply text-muted;
+  }
+  
+  .filter-option {
+    @apply px-3 py-1 rounded-md text-sm text-sub-text hover:bg-[rgba(255,255,255,0.05)] transition-colors;
+  }
+  
+  .filter-option.active {
+    @apply text-brand;
   }
 }
