@@ -3,7 +3,7 @@ import { useTypeRushStore } from "./util/store";
 import { FocusWrapper, GameSummary } from "./components";
 import { LuTimer, LuSkull, LuCaseSensitive, LuStar } from "react-icons/lu";
 import { texts } from "./util/texts";
-import { cn } from "./util/cn"; // Assume you have a className utility
+import { cn } from "./util/cn";
 
 export default function App() {
   const { points, earnedPoints, setPoints, setEarnedPoints } = useTypeRushStore();
@@ -17,6 +17,7 @@ export default function App() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
   const [timer, setTimer] = useState<number>(30);
+  const [activeFilter, setActiveFilter] = useState<string>("words");
 
   useEffect(() => {
     setCurrentText(texts[Math.floor(Math.random() * texts.length)]);
@@ -83,7 +84,7 @@ export default function App() {
   };
 
   const calculatePoints = (mistakes: number) => {
-    const basePoints = currentText.replace(/\s/g, length).length;
+    const basePoints = currentText.replace(/\s/g, "").length;
     let multiplier = 1;
     
     if (mistakes === 0) multiplier = 2;
@@ -106,27 +107,40 @@ export default function App() {
   };
 
   const renderText = () => {
-    return currentText.split("").map((char, index) => {
-      const inputChar = input[index];
-      let statusClass = "text-muted";
-      
-      if (inputChar) {
-        statusClass = char === inputChar ? "text-valid" : "text-invalid";
-      }
+    const words = currentText.split(" ");
+    
+    return (
+      <div className="flex flex-wrap justify-center gap-x-2">
+        {words.map((word, wordIndex) => (
+          <div key={wordIndex} className="inline-block">
+            {word.split("").map((char, charIndex) => {
+              const globalIndex = wordIndex === 0 
+                ? charIndex 
+                : words.slice(0, wordIndex).join(" ").length + wordIndex + charIndex;
+              
+              const inputChar = input[globalIndex];
+              let statusClass = "text-muted";
+              
+              if (inputChar !== undefined) {
+                statusClass = char === inputChar ? "text-valid" : "text-invalid";
+              }
 
-      return (
-        <span
-          key={index}
-          className={cn(
-            "text-[1.75rem] leading-[1.6] [word-spacing:5px]",
-            statusClass,
-            char === " " && "!text-muted" // Force space character styling
-          )}
-        >
-          {char}
-        </span>
-      );
-    });
+              return (
+                <span
+                  key={charIndex}
+                  className={cn(statusClass)}
+                >
+                  {char}
+                </span>
+              );
+            })}
+            {wordIndex < words.length - 1 && (
+              <span className="text-muted"> </span>
+            )}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -144,26 +158,66 @@ export default function App() {
           />
         ) : (
           <div className="flex flex-col items-center gap-8 w-full max-w-4xl">
-            <div className="game-status-bar">
-              <div>
-                <LuTimer className="text-icon" />
-                Timer <span className="text-accent">{timer}</span>
-              </div>
-              <div>
-                <LuSkull className="text-icon" />
-                Mistakes <span className="text-accent">{mistakes}</span>
-              </div>
-              <div>
-                <LuStar className="text-icon" />
-                Points <span className="text-accent">{points}</span>
-              </div>
-              <div>
-                <LuCaseSensitive className="text-icon-lg" />
-                Caps Lock <span className="text-accent">{capsLock ? "On" : "Off"}</span>
+            <div className="flex items-center justify-center w-full gap-2 mb-8">
+              <button 
+                className={cn("filter-option", activeFilter === "punctuation" && "active")}
+                onClick={() => setActiveFilter("punctuation")}
+              >
+                punctuation
+              </button>
+              <button 
+                className={cn("filter-option", activeFilter === "numbers" && "active")}
+                onClick={() => setActiveFilter("numbers")}
+              >
+                numbers
+              </button>
+              <button 
+                className={cn("filter-option", activeFilter === "time" && "active")}
+                onClick={() => setActiveFilter("time")}
+              >
+                time
+              </button>
+              <button 
+                className={cn("filter-option", activeFilter === "words" && "active")}
+                onClick={() => setActiveFilter("words")}
+              >
+                words
+              </button>
+              <button 
+                className={cn("filter-option", activeFilter === "quote" && "active")}
+                onClick={() => setActiveFilter("quote")}
+              >
+                quote
+              </button>
+              <button 
+                className={cn("filter-option", activeFilter === "zen" && "active")}
+                onClick={() => setActiveFilter("zen")}
+              >
+                zen
+              </button>
+              <button 
+                className={cn("filter-option", activeFilter === "custom" && "active")}
+                onClick={() => setActiveFilter("custom")}
+              >
+                custom
+              </button>
+            </div>
+            
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <button className="filter-option">10</button>
+              <button className="filter-option">25</button>
+              <button className="filter-option">50</button>
+              <button className="filter-option active">100</button>
+              <button className="filter-option">∞</button>
+            </div>
+
+            <div className="flex items-center justify-center w-full mb-12">
+              <div className="text-sub-text text-sm flex items-center gap-2">
+                <span className="text-brand">english 1k</span>
               </div>
             </div>
 
-            <div className="text-content w-full text-center">
+            <div className="text-content w-full text-center text-2xl mb-8">
               {renderText()}
             </div>
 
@@ -176,6 +230,15 @@ export default function App() {
               aria-label="Type the text here"
               readOnly={isCompleted}
             />
+            
+            <div className="text-sub-text text-xs mt-8">
+              {capsLock && (
+                <div className="flex items-center gap-2">
+                  <LuCaseSensitive className="text-brand" />
+                  <span>caps lock on</span>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

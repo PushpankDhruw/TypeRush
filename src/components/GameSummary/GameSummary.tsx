@@ -1,10 +1,12 @@
-type GameSummaryProps = {
-  calculateWPM: () => string | 0;
+import React from "react";
+
+interface GameSummaryProps {
+  calculateWPM: () => string;
   points: number;
   mistakes: number;
   earnedPoints: number;
   handleReplay: () => void;
-};
+}
 
 export default function GameSummary({
   calculateWPM,
@@ -14,32 +16,43 @@ export default function GameSummary({
   handleReplay,
 }: GameSummaryProps) {
   return (
-    <div className="flex flex-col gap-5 p-5 rounded-lg bg-white shadow-md dark:bg-[#2a2a2a] dark:text-[#e0e0e0]">
-      <p className="w-full p-[15px] m-0 border border-gray-200 rounded-md font-sans text-gray-800 dark:border-none dark:bg-[#333] dark:text-gray-200 dark:shadow-[0_2px_4px_rgba(255,255,255,0.05)]">
-        WPM: <span className="font-bold">{calculateWPM()}</span>
-      </p>
-      <p className="w-full p-[15px] m-0 border border-gray-200 rounded-md font-sans text-gray-800 dark:border-none dark:bg-[#333] dark:text-gray-200 dark:shadow-[0_2px_4px_rgba(255,255,255,0.05)]">
-        Total Points: <span className="font-bold">{points - mistakes + earnedPoints}</span>
-      </p>
-      <p className="w-full p-[15px] m-0 border border-gray-200 rounded-md font-sans text-gray-800 dark:border-none dark:bg-[#333] dark:text-gray-200 dark:shadow-[0_2px_4px_rgba(255,255,255,0.05)]">
-        Points Earned: <span className="font-bold">{earnedPoints}</span>
-      </p>
-      <p className="w-full p-[15px] m-0 border border-gray-200 rounded-md font-sans text-gray-800 dark:border-none dark:bg-[#333] dark:text-gray-200 dark:shadow-[0_2px_4px_rgba(255,255,255,0.05)]">
-        Letter Mistakes: <span className="font-bold">{mistakes}</span>
-      </p>
-      <p className="w-full p-[15px] m-0 border border-gray-200 rounded-md font-sans text-gray-800 dark:border-none dark:bg-[#333] dark:text-gray-200 dark:shadow-[0_2px_4px_rgba(255,255,255,0.05)]">
-        Total Points Calculation:{" "}
-        <span className="font-bold">
-          {`(${points} points) - (${mistakes} mistakes) + (${earnedPoints} earned points) = ${
-            points - mistakes + earnedPoints
-          }`}
-        </span>
-      </p>
+    <div className="flex flex-col items-center gap-6 p-8 rounded-lg bg-[rgba(255,255,255,0.05)] max-w-md w-full">
+      <h2 className="text-2xl font-medium text-brand">Test Complete!</h2>
+      
+      <div className="grid grid-cols-2 gap-4 w-full">
+        <div className="bg-[rgba(255,255,255,0.03)] p-4 rounded-md">
+          <div className="text-sub-text text-sm">WPM</div>
+          <div className="text-2xl text-text">{calculateWPM()}</div>
+        </div>
+        
+        <div className="bg-[rgba(255,255,255,0.03)] p-4 rounded-md">
+          <div className="text-sub-text text-sm">Accuracy</div>
+          <div className="text-2xl text-text">
+            {mistakes === 0 ? "100%" : `${Math.max(0, 100 - (mistakes * 5)).toFixed(1)}%`}
+          </div>
+        </div>
+        
+        <div className="bg-[rgba(255,255,255,0.03)] p-4 rounded-md">
+          <div className="text-sub-text text-sm">Mistakes</div>
+          <div className="text-2xl text-text">{mistakes}</div>
+        </div>
+        
+        <div className="bg-[rgba(255,255,255,0.03)] p-4 rounded-md">
+          <div className="text-sub-text text-sm">Points</div>
+          <div className="text-2xl text-text">{points}</div>
+        </div>
+      </div>
+      
+      <div className="mt-4">
+        <div className="text-sub-text text-sm mb-2">Points earned this round</div>
+        <div className="text-xl text-brand">+{earnedPoints}</div>
+      </div>
+      
       <button
         onClick={handleReplay}
-        className="px-5 py-2.5 border-none rounded-md bg-blue-600 text-white font-semibold cursor-pointer transition-colors duration-300 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        className="mt-4 px-6 py-3 bg-brand text-bg font-medium rounded-md hover:bg-opacity-90 transition-colors"
       >
-        Play Again
+        Try Again
       </button>
     </div>
   );
