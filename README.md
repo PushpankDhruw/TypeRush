@@ -4,8 +4,8 @@ TypeRush is a web app that helps you get faster and more accurate at typing.
 
 ## 🚀 Features
 
-- **New Typing Tests Every Time**: The app has lots of different texts to keep your practice interesting and challenging.
-- **See Your Progress as You Type**: You can watch your typing speed, how well you're doing, and your score update live.
+- **New Typing Tests **Every** Time**: The app has lots of different texts to keep your practice interesting and challenging.
+- **See Your Progress as You Type**: You can watch your typing speed, how well you're doing, and your score updbate live.
 - **Spot Your Mistakes Easily**: If you type something wrong, it'll light up so you can see where you need to improve.
 - **Caps Lock Warning**: It tells you if you've accidentally left Caps Lock on to avoid errors.
 - **Summary After Each Test**: When you finish a test, you get a detailed report of your speed, score, and mistakes.
@@ -38,7 +38,9 @@ To run the project in your local environment, follow these steps:
 
 - **Leaderboard**: Add a leaderboard to make it more competitive.
 - **Your Own Texts**: Let you practice with whatever text you want.
-- **More Stats**: Offer detailed stats to show how you're improving over time.
+- **More Stats**: Offer deta
+- 
+- iled stats to show how you're improving over time.
 - **User Accounts**: Make accounts so you can pick up where you left off on any device.
 
 ## 🐞 Issues
